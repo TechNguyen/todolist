@@ -1,4 +1,4 @@
-import classnames from 'classnames/bind'
+import classNames from 'classnames/bind'
 import Styles from './ToDo.module.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -9,15 +9,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addTodoAction, changeStatusJobs } from '../../redux/action';
 import { useState } from 'react';
 import { todoList } from '../../redux/selector';
-import LoadingButton from '../Loadingbutton/Loadingbtn';
-
-                               
-const cx = classnames.bind(Styles)
+import LoadingButton from '../Loadingbutton/Loadingbtn';               
+import Search from '../Search/Search';
+const cx = classNames.bind(Styles)
 
 const ToDo = () => {
     const dispatch = useDispatch();
     const [todoname, setName] = useState('');
     const [completed, setCompleted] = useState(false);
+    const [sortby, setSort] = useState('all');
+    // add job
     const handleAddToList = () => {
         dispatch( addTodoAction({
             id: Math.random(),
@@ -29,30 +30,38 @@ const ToDo = () => {
     const hanleName = (e) => {
         setName(e.target.value)
     }
+    // Change completed
     const hanldeSetcomplete = (e) => {
-        setCompleted(e.target.value)
+        setCompleted(e.target.value === 'true' ? true : false)
     }
-    const hanleChangeComplted = () => {
-        console.log();
-        // dispatch(
-        //     changeStatusJobs(
-        //         {
-
-        //         }
-        //     )
-        // )
+    const hanleChangeComplted = (e) => {
+        dispatch(
+            changeStatusJobs(
+                {
+                    id: e.target.id,
+                    completed: completed
+                }
+            )
+        )
     }
-    const todoListArr  =  useSelector(todoList)
+    // sort by
+    const hanleSort = (e) => {
+        setSort(e.target.value)
+    }
+    const todoListArr = useSelector(todoList)
     return (
-        <div classNames={cx('todo')}>
-            <div classNames={cx('todo__banner')}>
+        <div className={cx('todo')}>
+            <div className={cx('todo__banner')}>
                 <span>
                     <img src="" alt="" />
                 </span>
                     <h1>To Do List</h1>
             </div>
-            <div classNames={cx('todo__body')}>
-                    <div classNames={cx('todo__sort')}>
+            <div className={cx('todo__body')}>
+
+                    <Search />
+
+                    <div className={cx('todo__sort')}>
                         <div className={cx('todo__add')}>
                             <InputGroup size="sm" className="mb-3">
                                 <Form.Control
@@ -69,13 +78,13 @@ const ToDo = () => {
 
 
                     <div className={cx('todo__action')}>
-                        <Form.Select aria-label="Default select example">
-                            <option defaultChecked>Filter</option>
+                        <Form.Select aria-label="Default select example" onChange={hanleSort}>
+                            <option defaultChecked value={'all'}>Sort By</option>
                             <option value="all">All</option>
                             <option value="complete">Complete</option>
                             <option value="todo">To Do</option>
                         </Form.Select>
-                        <LoadingButton />
+                        <LoadingButton choose = {sortby} />
                     </div>
 
 
@@ -107,7 +116,7 @@ const ToDo = () => {
                                         id={`inline-radio-2`}
                                         value={false}
                                     />
-                                   <Button variant="warning" onClick={hanleChangeComplted}>Change</Button>{' '}
+                                   <Button variant="warning" id={todo.id} onClick={(e) => hanleChangeComplted(e)}>Change</Button>{' '}
                             </div>
                         </Card>
                         )

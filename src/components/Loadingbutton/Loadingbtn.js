@@ -1,9 +1,22 @@
 import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import { useDispatch } from 'react-redux';
+import { sortJobs } from '../../redux/action';
 
-function LoadingButton() {
+function LoadingButton({ choose }) {
   const [isLoading, setLoading] = useState(false);
+  const dispatch = useDispatch()
+  const handleClick = () => {
+    dispatch(
+       sortJobs(
+        {
+          choose
+        }
+       )
+    )
+    setLoading(true);
 
+}
   useEffect(() => {
     function simulateNetworkRequest() {
       return new Promise((resolve) => setTimeout(resolve, 2000));
@@ -16,7 +29,6 @@ function LoadingButton() {
     }
   }, [isLoading]);
 
-  const handleClick = () => setLoading(true);
 
   return (
     <Button
@@ -24,7 +36,7 @@ function LoadingButton() {
       disabled={isLoading}
       onClick={!isLoading ? handleClick : null}
     >
-      {isLoading ? 'Loading…' : 'Click to load'}
+      {isLoading ? 'Sort …' : 'Click to sort'}
     </Button>
   );
 }

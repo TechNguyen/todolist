@@ -11,3 +11,15 @@ export const changeStatusJobs = (data) => {
         payload: data.completed,
     }
 }
+export const sortJobs = (data) => {
+    return {
+        type: 'filters/sort',
+        payload: data.choose,
+    }
+}
+export const searchJob = (data) => {
+    return {
+        type: 'filters/search',
+        payload: data.search,
+    }
+}

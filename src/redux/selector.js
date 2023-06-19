@@ -1,3 +1,3 @@
-export const todoList  = (state) => {
+export const todoList = (state) => {
     return state.todoList
 }
